@@ -26,9 +26,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CInject.Injections")]
 [assembly: AssemblyDescription("Part of CInject (http://codeinject.codeplex.com)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Punit Ganshani")]
-[assembly: AssemblyProduct("CInject.Injections")]
-[assembly: AssemblyCopyright("Copyright © Punit Ganshani 2011")]
+[assembly: AssemblyCompany("Punit Ganshani [ www.ganshani.com ]")]
+[assembly: AssemblyProduct("CInject")]
+[assembly: AssemblyCopyright("Copyright © Punit Ganshani 2011-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 //[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.xml", Watch = true)]
@@ -54,5 +54,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyFileVersion("1.2.0.0")]
+[assembly: AssemblyVersion("1.4")]
+[assembly: AssemblyFileVersion("1.4")]

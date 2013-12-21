@@ -29,9 +29,9 @@ using System.Runtime.InteropServices;
         "CInject allows code injection into any managed assembly without disassembling and recompiling.  It makes the task of injecting any code in single or multiple methods in one or many assemblies! For more information visit http://www.ganshani.com/applications/cinject"
         )]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Punit Ganshani")]
+[assembly: AssemblyCompany("Punit Ganshani [ www.ganshani.com ]")]
 [assembly: AssemblyProduct("CInject")]
-[assembly: AssemblyCopyright("Copyright © Punit Ganshani 2012")]
+[assembly: AssemblyCopyright("Copyright © Punit Ganshani 2011-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -56,5 +56,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.3.1.0")]
-[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyVersion("1.4")]
+[assembly: AssemblyFileVersion("1.4")]
