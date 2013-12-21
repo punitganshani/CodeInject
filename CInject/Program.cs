@@ -19,6 +19,8 @@
 using System;
 using System.Windows.Forms;
 using System.ComponentModel.Composition.Hosting;
+using CInject.Injections.Attributes;
+using CInject.Injections.Injectors;
 using CInject.PluginInterface;
 
 namespace CInject
@@ -33,8 +35,7 @@ namespace CInject
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-
+            
             Application.Run(new frmMain());
         }
 

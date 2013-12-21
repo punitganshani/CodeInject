@@ -9,33 +9,34 @@ namespace CInject.Injections.Library
 {
     internal static class CachedSerializer
     {
-        private static readonly Dictionary<Type, XmlSerializer> _serializer;
+        private static readonly Dictionary<Type, XmlSerializer> Serializer;
+
         static CachedSerializer()
         {
-            _serializer = new Dictionary<Type, XmlSerializer>();
+            Serializer = new Dictionary<Type, XmlSerializer>();
         }
 
         private static XmlSerializer GetSerializer<T>()
         {
             Type type = typeof(T);
-            if (_serializer.ContainsKey(type))
-                return _serializer[type];
+            if (Serializer.ContainsKey(type))
+                return Serializer[type];
             else
             {
                 var xs = new XmlSerializer(type);
-                _serializer[type] = xs;
+                Serializer[type] = xs;
                 return xs;
             }
         }
 
         private static XmlSerializer GetSerializer(Type type)
         {
-            if (_serializer.ContainsKey(type))
-                return _serializer[type];
+            if (Serializer.ContainsKey(type))
+                return Serializer[type];
             else
             {
                 var xs = new XmlSerializer(type);
-                _serializer[type] = xs;
+                Serializer[type] = xs;
                 return xs;
             }
         }
@@ -44,7 +45,6 @@ namespace CInject.Injections.Library
         {
             try
             {
-
                 string xmlString = null;
                 var memoryStream = new MemoryStream();
                 XmlSerializer xs = GetSerializer(type);
@@ -74,7 +74,7 @@ namespace CInject.Injections.Library
                 xmlString = Converter.ToString(memoryStream.ToArray());
                 return xmlString;
             }
-            catch 
+            catch
             {
                 throw;
             }

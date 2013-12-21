@@ -25,9 +25,11 @@ using CInject.Data;
 using CInject.Engine.Data;
 using CInject.Extensions;
 using CInject.Engine.Extensions;
+using CInject.Injections.Attributes;
 using CInject.Injections.Interfaces;
 using CInject.Engine.Resolvers;
 using CInject.Engine.Utils;
+using CInject.Properties;
 using CInject.Utils;
 using Mono.Cecil;
 using BaseAssemblyResolver = CInject.Engine.Resolvers.BaseAssemblyResolver;
@@ -52,7 +54,7 @@ namespace CInject
         [ImportMany(typeof(IPlugin))]
         public IEnumerable<IPlugin> Plugins { get; set; }
 
-        List<IPlugin> PluginList;
+        internal List<IPlugin> PluginList;
 
         public frmMain()
         {
@@ -63,7 +65,7 @@ namespace CInject
                 LoadPlugins();
                 SendLoadMessageToPlugins();
             }
-            catch (Exception ex) { MessageBox.Show("There was some error loading plugins" + ex.Message); }
+            catch (Exception ex) { MessageBox.Show(Resources.PluginLoadError + ex.Message); }
         }
 
         private void SendLoadMessageToPlugins()
@@ -93,35 +95,38 @@ namespace CInject
         {
             try
             {
+                if (!Directory.Exists(@".\Plugins")) return;
+
                 var catalog = new DirectoryCatalog(@".\Plugins", "CInject.Plugin.*.dll");
                 catalog.Refresh();
 
                 var container = new CompositionContainer(catalog);
                 Plugins = container.GetExportedValues<IPlugin>();
 
-                PluginList = Plugins.ToList();
+                var pluginArray = Plugins as IPlugin[] ?? Plugins.ToArray();
+                PluginList = pluginArray.ToList();
 
-                Parallel.ForEach(Plugins, (current) =>
+                Parallel.ForEach(pluginArray, (current) =>
                 {
                     try
                     {
                         if (current.Menu != null)
                             PopulatePluginMenu(current);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        
+
                     }
                 });
             }
             catch (AggregateException aggregateException)
             {
                 string message = String.Concat(aggregateException.InnerExceptions.Select(x => x.Message));
-                MessageBox.Show("Some errors occured while loading plugins: " + message);
+                MessageBox.Show(Resources.PluginLoadErrorAggregate + message);
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Some errors occured while loading plugins: " + exception.Message);
+                MessageBox.Show(Resources.PluginLoadErrorAggregate + exception.Message);
             }
         }
 
@@ -145,6 +150,16 @@ namespace CInject
             _project = new Project();
 
             grdCombination.DataSource = null;
+
+            var directory = Path.GetDirectoryName(Application.ExecutablePath);
+            if (directory != null)
+            {
+                var files = Directory.GetFiles(directory, "*.dll");
+                foreach (var file in files)
+                {
+                    LoadInjectorAssembly(file);
+                }
+            }
         }
 
         private void resolver_OnMessageReceived(object sender, MessageEventArgs e)
@@ -265,9 +280,14 @@ namespace CInject
             if (result == DialogResult.OK)
             {
                 string assemblyName = openInjectionDialog.FileName;
-                _project.Injectors.Add(assemblyName);
-                AddInjectionAssembly(assemblyName);
+                LoadInjectorAssembly(assemblyName);
             }
+        }
+
+        private void LoadInjectorAssembly(string assemblyName)
+        {
+            _project.Injectors.Add(assemblyName);
+            AddInjectionAssembly(assemblyName);
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -435,6 +455,23 @@ namespace CInject
                     {
                         SendMessageToPlugins(EventType.MethodInjectionStart, _mapping[i], null, "Starting injection of a method");
                         success &= _mapping[i].Assembly.Inject(_mapping[i].Method, _mapping[i].Injector);
+
+                        var attributes = _mapping[i].Injector.GetCustomAttributes(true);
+                        var directory = Path.GetDirectoryName(_mapping[i].Assembly.Path);
+                        if (directory != null)
+                        {
+                            foreach (var dependentFilesAttribute in attributes)
+                            {
+                                var typeCasted = dependentFilesAttribute as DependentFilesAttribute;
+                                if (typeCasted == null) continue;
+
+                                foreach (var file in typeCasted.Files)
+                                {
+                                    File.Copy(file, Path.Combine(directory, file), true);
+                                }
+                            }
+                        }
+
                         SendMessageToPlugins(EventType.MethodInjectionComplete, _mapping[i], null, "Ended injection of a method");
                     }
                     catch (Exception exceptionInjection)
@@ -574,7 +611,6 @@ namespace CInject
             }
 
             var nodeAssembly = new TreeNode { Text = Path.GetFileName(assemblyName), Tag = assemblyInjectionCode };
-            _rootInjection.Nodes.Add(nodeAssembly);
 
             List<Type> types = assemblyInjectionCode.FindTypes<ICInject>();
 
@@ -583,7 +619,12 @@ namespace CInject
                 OnBindInjectors(assemblyInjectionCode, types[i], nodeAssembly, true);
             }
 
-            treeInjectionCode.ExpandAll();
+            // don't show the assembly if it does not have any injectors
+            if (types.Count > 0)
+            {
+                _rootInjection.Nodes.Add(nodeAssembly);
+                treeInjectionCode.ExpandAll();
+            }
 
             _injectorAssemblyLoaded = true;
             SendMessageToPlugins(EventType.InjectionAssemblyLoaded, null, null, assemblyName);

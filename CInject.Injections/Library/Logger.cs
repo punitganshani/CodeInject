@@ -27,7 +27,6 @@ namespace CInject.Injections.Library
     internal static class Logger
     {
         private static readonly ILog Log;
-
         static Logger()
         {
             if (File.Exists("LogInject.log4net.xml"))
@@ -35,10 +34,7 @@ namespace CInject.Injections.Library
             else
                 BasicConfigurator.Configure();
 
-            string loggerName = Assembly.GetEntryAssembly().FullName;
-            loggerName = loggerName.Substring(0, loggerName.IndexOf(','));
-
-            Log = LogManager.GetLogger(loggerName);
+            Log = LogManager.GetLogger("CInject");
         }
 
         public static bool IsDebugEnabled
@@ -48,17 +44,20 @@ namespace CInject.Injections.Library
 
         public static void Debug(string message)
         {
-            Log.Debug(message);
+            if (Log.IsDebugEnabled)
+                Log.Debug(message);
         }
 
         public static void Info(string message)
         {
-            Log.Info(message);
+            if (Log.IsInfoEnabled)
+                Log.Info(message);
         }
 
         public static void Error(Exception exception)
         {
-            Log.Error(string.Format("An error occured while logging: {0}", exception.ToString()));
+            if (Log.IsErrorEnabled)
+                Log.Error("An error occured while logging", exception);
         }
     }
 }

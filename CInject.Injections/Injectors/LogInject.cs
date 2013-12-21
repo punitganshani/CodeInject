@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using CInject.Injections.Attributes;
 using CInject.Injections.Interfaces;
 using CInject.Injections.Library;
 using System.Text;
@@ -24,71 +25,78 @@ using System.Collections;
 
 namespace CInject.Injections.Injectors
 {
+    [DependentFiles("CInject.Injections.dll", "LogInject.log4net.xml", "log4net.dll")]
     public class LogInject : ICInject
     {
+        private bool _disposed;
         private CInjection _injection;
-        public LogInject()
-        {
-            
-        }
 
         #region ICInject Members
 
         public void OnInvoke(CInjection injection)
         {
+            if (injection == null) return;
+
             _injection = injection;
 
             try
             {
-                Logger.Info(String.Format("Invoked {0}.{1}, {2}", injection.Method.DeclaringType.Name, injection.Method.Name, injection.ExecutingAssembly.GetName().Name));
+                if (injection.IsValid())
+                    Logger.Info(_injection.GetMessage("Invoked"));
 
-                if (Logger.IsDebugEnabled)
+                if (!Logger.IsDebugEnabled) return;
+
+                var parameters = injection.Method.GetParameters();
+                if (injection.Arguments != null)
                 {
-                    var parameters = injection.Method.GetParameters();
-                    if (injection.Arguments != null && parameters != null)
+                    Logger.Debug(String.Format(">> Paramerters: {0}", injection.Arguments.Length));
+                    for (int i = 0; i < injection.Arguments.Length; i++)
                     {
-                        Logger.Debug(String.Format(">> Paramerters: {0}", injection.Arguments.Length));
-                        for (int i = 0; i < injection.Arguments.Length; i++)
+                        var currentArgument = injection.Arguments[i];
+                        if (currentArgument == null)
                         {
-                            if (injection.Arguments[i] is IDictionary)
-                            {
-                                IDictionary dictionary = (IDictionary)injection.Arguments[i];
-                                StringBuilder dictionaryBuilder = new StringBuilder();
-                                foreach (var key in dictionary.Keys)
-                                {
-                                    dictionaryBuilder.AppendFormat("{0}={1}|", key, GetStringValue(dictionary[key]));
-                                }
+                            Logger.Debug(String.Format("    [{0}]: <null>", parameters[i].Name));
+                            continue;
+                        }
 
-                                Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { '|' })));
-                            }
-                            else if (injection.Arguments[i] is ICollection)
+                        if (currentArgument is IDictionary)
+                        {
+                            var dictionary = (IDictionary)currentArgument;
+                            var dictionaryBuilder = new StringBuilder();
+                            foreach (var key in dictionary.Keys)
                             {
-                                ICollection collection = (ICollection)injection.Arguments[i];
-                                IEnumerator enumerator = collection.GetEnumerator();
-                                StringBuilder dictionaryBuilder = new StringBuilder();
-
-                                while (enumerator.MoveNext())
-                                {
-                                    dictionaryBuilder.AppendFormat("{0},", GetStringValue(enumerator.Current)).AppendLine();
-                                }
-
-                                Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { ',' })));
+                                dictionaryBuilder.AppendFormat("{0}={1}|", key, GetStringValue(dictionary[key]));
                             }
-                            else if (injection.Arguments[i] is IEnumerable)
+
+                            Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { '|' })));
+                        }
+                        else if (currentArgument is ICollection)
+                        {
+                            ICollection collection = (ICollection)currentArgument;
+                            IEnumerator enumerator = collection.GetEnumerator();
+                            StringBuilder dictionaryBuilder = new StringBuilder();
+
+                            while (enumerator.MoveNext())
                             {
-                                IEnumerable enumerator = (IEnumerable)injection.Arguments[i];
-                                StringBuilder dictionaryBuilder = new StringBuilder();
+                                dictionaryBuilder.AppendFormat("{0},", GetStringValue(enumerator.Current)).AppendLine();
+                            }
 
-                                foreach (var item in enumerator)
-                                {
-                                    dictionaryBuilder.AppendFormat("{0},", GetStringValue(item)).AppendLine();
-                                }
-                                Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { ',' })));
-                            }
-                            else
+                            Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { ',' })));
+                        }
+                        else if (currentArgument is IEnumerable)
+                        {
+                            IEnumerable enumerator = (IEnumerable)currentArgument;
+                            StringBuilder dictionaryBuilder = new StringBuilder();
+
+                            foreach (var item in enumerator)
                             {
-                                Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, GetStringValue(injection.Arguments[i])));
+                                dictionaryBuilder.AppendFormat("{0},", GetStringValue(item)).AppendLine();
                             }
+                            Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { ',' })));
+                        }
+                        else
+                        {
+                            Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, GetStringValue(currentArgument)));
                         }
                     }
                 }
@@ -120,7 +128,8 @@ namespace CInject.Injections.Injectors
         {
             try
             {
-                Logger.Debug(String.Format("Destroyed {0}.{1}, {2}", _injection.Method.DeclaringType.Name, _injection.Method.Name, _injection.ExecutingAssembly.GetName().Name));
+                if (_disposed) return;
+                DestroyObject();
             }
             catch (Exception exception)
             {
@@ -128,10 +137,34 @@ namespace CInject.Injections.Injectors
             }
         }
 
-
         public void OnComplete()
         {
-            Logger.Info(String.Format("Completed {0}.{1}, {2}", _injection.Method.DeclaringType.Name, _injection.Method.Name, _injection.ExecutingAssembly.GetName().Name));
+            if (!_injection.IsValid()) return;
+
+            Logger.Info(_injection.GetMessage("Completed"));
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                DestroyObject();
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception);
+            }
+            finally
+            {
+                _disposed = true;
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        private void DestroyObject()
+        {
+            Logger.Debug(_injection.GetMessage("Destroyed"));
+            _injection = null;
         }
     }
 }
