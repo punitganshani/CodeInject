@@ -25,9 +25,11 @@ namespace CInject.Injections.Injectors
         {
             _injection = injection;
 
+            
             if (!Logger.IsDebugEnabled) return;
             if (_injection == null) return;
             if (!File.Exists(FileName)) return;
+            if (!injection.IsValid()) return;
 
             var objectSearch = CachedSerializer.Deserialize<ObjectSearch>(File.ReadAllText(FileName), Encoding.UTF8);
             if (objectSearch == null || objectSearch.PropertyNames == null) return;
@@ -38,7 +40,7 @@ namespace CInject.Injections.Injectors
 
                 foreach (var key in dictionary.Keys)
                 {
-                    Logger.Debug(String.Format("Argument #{0} :{1}= {2}", key, propertyName, dictionary[key] ?? "<null>"));
+                    Logger.Debug(String.Format("Method {0} Argument #{1} :{2}= {3}", injection.Method.Name, key, propertyName, dictionary[key] ?? "<null>"));
                 }
             }
         }

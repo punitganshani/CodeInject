@@ -39,7 +39,7 @@ namespace CInject.Injections.Library
         /// <returns>Value of the property. If property is not found, it will return NULL</returns>
         public object GetPropertyOfArgument(int argumentIndex, string propertyName)
         {
-            if (Arguments == null) return null;
+            if (Arguments == null || string.IsNullOrEmpty(propertyName)) return null;
 
             if (Arguments.Length <= argumentIndex)
                 throw new InvalidOperationException("ArgumentIndex does not exist in the Injection :" + argumentIndex);
@@ -47,7 +47,11 @@ namespace CInject.Injections.Library
             object argumentRequired = Arguments[argumentIndex];
 
             if (argumentRequired != null)
-                return argumentRequired.GetType().GetProperty(propertyName).GetValue(argumentRequired, null);
+            {
+                var property = argumentRequired.GetType().GetProperty(propertyName);
+                if (property == null) return null;
+                return property.GetValue(argumentRequired, null);
+            }
 
             return null;
         }
