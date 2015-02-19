@@ -52,6 +52,7 @@ namespace CInject.TargetAssembly
             TestClass.MyDelegate delegateDefinition = new TestClass.MyDelegate(DelegateCalled);
             testClass.CallDelegate(delegateDefinition);
 
+            Console.WriteLine("Name is: " + testClass.NameProperty);
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }

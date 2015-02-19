@@ -109,5 +109,13 @@ namespace CInject.TargetAssembly
         {
             return x - y;
         }
+
+        public string NameProperty
+        {
+            get
+            {
+                return Name;
+            }
+        }
     }
 }

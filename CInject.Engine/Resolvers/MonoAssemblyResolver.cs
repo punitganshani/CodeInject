@@ -187,9 +187,8 @@ namespace CInject.Engine.Resolvers
             bool success = true;
             if (method.IsConstructor ||
                 method.IsAbstract ||
-                method.IsGetter ||
                 method.IsSetter ||
-                method.IsSpecialName ||
+                (method.IsSpecialName && !method.IsGetter) || // to allow getter methods
                 method.IsGenericInstance ||
                 method.IsManaged == false ||
                 method.Body == null)
