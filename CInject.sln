@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.23103.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CInject", "CInject\CInject.csproj", "{43D4090A-CCC2-4204-8103-47A54519D661}"
 EndProject
@@ -26,41 +26,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAF5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CInject.SampleWinform", "CInject.SampleWinform\CInject.SampleWinform.csproj", "{1027339A-1B47-42A3-A30A-67FBE5F3CEAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CInject.SampleWPF", "CInject.SampleWPF\CInject.SampleWPF.csproj", "{BE33811B-F71A-439B-A4F7-99B3B2002BD2}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = CInject\\CInject.csproj
-		SccProjectTopLevelParentUniqueName1 = CInject.sln
-		SccProjectName1 = CInject
-		SccLocalPath1 = CInject
-		SccProjectUniqueName2 = CInject.Injections\\CInject.Injections.csproj
-		SccProjectTopLevelParentUniqueName2 = CInject.sln
-		SccProjectName2 = CInject.Injections
-		SccLocalPath2 = CInject.Injections
-		SccProjectUniqueName3 = CInject.TargetAssembly\\CInject.TargetAssembly.csproj
-		SccProjectTopLevelParentUniqueName3 = CInject.sln
-		SccProjectName3 = CInject.TargetAssembly
-		SccLocalPath3 = CInject.TargetAssembly
-		SccProjectUniqueName4 = CInject.PluginInterface\\CInject.PluginInterface.csproj
-		SccProjectTopLevelParentUniqueName4 = CInject.sln
-		SccProjectName4 = CInject.PluginInterface
-		SccLocalPath4 = CInject.PluginInterface
-		SccProjectUniqueName5 = CInject.Plugin.Sample\\CInject.Plugin.Sample.csproj
-		SccProjectTopLevelParentUniqueName5 = CInject.sln
-		SccProjectName5 = CInject.Plugin.Sample
-		SccLocalPath5 = CInject.Plugin.Sample
-		SccProjectUniqueName6 = CInject.Engine\\CInject.Engine.csproj
-		SccProjectTopLevelParentUniqueName6 = CInject.sln
-		SccProjectName6 = CInject.Engine
-		SccLocalPath6 = CInject.Engine
-		SccProjectUniqueName7 = CInject.SampleWinform\\CInject.SampleWinform.csproj
-		SccProjectTopLevelParentUniqueName7 = CInject.sln
-		SccProjectName7 = CInject.SampleWinform
-		SccLocalPath7 = CInject.SampleWinform
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -140,17 +108,30 @@ Global
 		{1027339A-1B47-42A3-A30A-67FBE5F3CEAC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1027339A-1B47-42A3-A30A-67FBE5F3CEAC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1027339A-1B47-42A3-A30A-67FBE5F3CEAC}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Debug|x86.Build.0 = Debug|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{FD92845E-20BA-4519-9C70-F14A7C2D4131} = {3F53D25C-D3CA-438D-820C-456EE4677FDF}
-		{35D6A1B5-E3E9-414E-899C-EFF310EDD009} = {3F53D25C-D3CA-438D-820C-456EE4677FDF}
 		{43D4090A-CCC2-4204-8103-47A54519D661} = {3F53D25C-D3CA-438D-820C-456EE4677FDF}
+		{FD92845E-20BA-4519-9C70-F14A7C2D4131} = {3F53D25C-D3CA-438D-820C-456EE4677FDF}
+		{D242525B-148D-4AE6-AFD3-C5B58BFD2F52} = {EAF55B72-8431-4D4C-8F7B-0E216C4FBA52}
 		{3AF71CBE-9986-4B9C-810D-E8E4F30FEC35} = {EAF55B72-8431-4D4C-8F7B-0E216C4FBA52}
 		{938CE94C-539D-48D1-9DB7-9E3EF3CE0D3A} = {EAF55B72-8431-4D4C-8F7B-0E216C4FBA52}
-		{D242525B-148D-4AE6-AFD3-C5B58BFD2F52} = {EAF55B72-8431-4D4C-8F7B-0E216C4FBA52}
+		{35D6A1B5-E3E9-414E-899C-EFF310EDD009} = {3F53D25C-D3CA-438D-820C-456EE4677FDF}
 		{1027339A-1B47-42A3-A30A-67FBE5F3CEAC} = {EAF55B72-8431-4D4C-8F7B-0E216C4FBA52}
+		{BE33811B-F71A-439B-A4F7-99B3B2002BD2} = {EAF55B72-8431-4D4C-8F7B-0E216C4FBA52}
 	EndGlobalSection
 EndGlobal
