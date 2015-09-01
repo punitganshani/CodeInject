@@ -50,4 +50,4 @@ You have many alternatives to distribute the plugin
 - Host the source code on GitHub, or other repository websites and provide us the link for promotion purposes
 
 **How about code injection at compile time?**
-If you are looking at dynamic injection based on the code you have written in an assembly, it would be worth while trying dI.Hook  You can define the injections (or called hooks) in configuration file and invoke them wherever required. 
+If you are looking at dynamic injection based on the code you have written in an assembly, it would be worth while trying [dI.Hook](https://github.com/punitganshani/dI.Hook)  You can define the injections (or called hooks) in configuration file and invoke them wherever required. 
