@@ -1,6 +1,8 @@
 CodeInject
 ==========
 
+[![Build status](https://ci.appveyor.com/api/projects/status/vupse9cynn2e8q5s?svg=true)](https://ci.appveyor.com/project/punitganshani/codeinject)
+
 CodeInject - Code Inject and Runtime Intelligence
 
 CInject (or CodeInject) allows code injection into any managed assembly without disassembling and recompiling it. It eases the inevitable task of injecting any code in single or multiple methods in one or many assemblies to intercept code for almost any purpose.
