@@ -36,6 +36,8 @@ namespace CInject.TargetAssembly
             string name = "Punit", name2 = string.Empty;
 
             Console.WriteLine("Test of ref parameters to a method. Expected value: Punit.appended Return Value:" + testClass.GetRefValue(ref name));
+            Console.WriteLine("Test of string parameter to a method. Expected value: Work Done Return Value:" + testClass.GetStringValue("Done"));
+
             Console.WriteLine("Value of name (ref)" + name);
 
             Console.WriteLine("Test of out parameters to a method. Expected value: new Value Return Value:" + testClass.GetOutValue(out name2));
@@ -46,6 +48,8 @@ namespace CInject.TargetAssembly
 
             Console.WriteLine("Test of optional parameter to a method. Expected value: 8 Return Value:" + testClass.AddOptional(3));
             Console.WriteLine("Test of optional parameter to a method. Expected value: 10 Return Value:" + testClass.AddOptional(3, 7));
+
+
 
             Console.WriteLine("Test call of delegate");
 
@@ -61,6 +65,5 @@ namespace CInject.TargetAssembly
         {
             Console.WriteLine("Delegate Called, Wonderful!");
         }
-
     }
 }

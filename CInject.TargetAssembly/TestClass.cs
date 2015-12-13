@@ -33,6 +33,12 @@ namespace CInject.TargetAssembly
             return obj.GetType().Name;
         }
 
+        public string GetStringValue(string name)
+        {
+            return "Work " + name;
+        }
+
+
         public string GetRefValue(ref string name)
         {
             try
