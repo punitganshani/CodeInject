@@ -83,6 +83,10 @@ namespace CInject.Injections.Injectors
 
                             Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, dictionaryBuilder.ToString().TrimEnd(new[] { ',' })));
                         }
+                        else if (currentArgument is String)
+                        {
+                            Logger.Debug(String.Format("    [{0}]: {1}", parameters[i].Name, currentArgument.ToString()));
+                        }
                         else if (currentArgument is IEnumerable)
                         {
                             IEnumerable enumerator = (IEnumerable)currentArgument;
